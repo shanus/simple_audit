@@ -48,8 +48,9 @@ module SimpleAudit
 
           # write_inheritable_attribute :username_method, (options[:username_method] || :name).to_sym
           class_attribute :username_method
-          send :username_method, (options[:username_method] || :name).to_sym
-          class_inheritable_reader :username_method
+          self.username_method = (options[:username_method] || :name).to_sym
+          #send :username_method, (options[:username_method] || :name).to_sym
+          #class_inheritable_reader :username_method
 
           attributes_and_associations = proc do |record|
             changes = record.attributes
@@ -61,8 +62,9 @@ module SimpleAudit
           audit_changes_proc = block_given? ? block.to_proc : attributes_and_associations
           # write_inheritable_attribute :audit_changes, audit_changes_proc
           class_attribute :audit_changes
-          send :audit_changes, audit_changes_proc
-          class_inheritable_reader :audit_changes
+          self.audit_changes = audit_changes_proc
+          #send :audit_changes, audit_changes_proc
+          #class_inheritable_reader :audit_changes
 
           has_many :audits, :as => :auditable, :class_name => '::SimpleAudit::Audit'
 
